@@ -1,11 +1,62 @@
+// try to make claendar in funciton
+
+
 #include<stdio.h>
 #include<conio.h>
 int checklp(int year);
 int calcTotalDays(int year);
 void printCalendar(int weekDays, int monthDays);
+void main2();
+void addEvent();
+void viewEvent();
+void editEvent();
+
+
+struct event {
+    int year, month, day;
+    char note[100];
+
+};
+
  int main()
  {
-    int monthDays[]= {0, 31,28,31,30,31,30,31,31,30,31,30,31};
+    int choice;
+    struct event e[100];
+    int eventcount = 0;
+    // printf("etner your choice: ");
+     //scanf("%d", &choice);
+    while(1)
+    {
+        printf("\n Enter your choice: ");
+     printf("\n 1.View calendar. \n 2.Add Event \n 3.View Event \n 4.Edit event \n 5.Exit ");
+     printf(" \n");
+     scanf("%d", &choice);
+
+
+
+        switch(choice)
+        {
+        case 1:
+             main2();
+            break;
+        case 2:
+            addEvent();
+            break;
+        case 3:
+          //  viewEvent();
+            break;
+        case 4:
+          //  editEvent();
+            break;
+        case 5:
+            return 1;
+        }
+    }
+     return 0;
+ }
+ void main2()
+ {
+     int monthDays[]= {0, 31,28,31,30,31,30,31,31,30,31,30,31};
     int totaldays;
     int month, year,weekday;
     char *weekDays[]={"sun","mon","tue","wed","thu","fri","sat"};
@@ -29,7 +80,7 @@ void printCalendar(int weekDays, int monthDays);
 
         totaldays+= 1;
     }
-    printf("total dsys ios %d \n", totaldays);
+    printf("total days is %d \n", totaldays);
     weekday= totaldays%7;
     printf("the last day of previous month was %s \n", weekDays[weekday]);
     weekday++;
@@ -46,7 +97,6 @@ void printCalendar(int weekDays, int monthDays);
 
 
     printCalendar(weekday, daysInMonth);
-     return 0;
  }
 
  int checklp(year)
@@ -95,4 +145,29 @@ void printCalendar(int weekDays, int monthDays);
             printf("\n");
 
      }
+ }
+
+ void addEvent()
+ {
+    FILE* ptr;
+    int year,month,day;
+    char notes[100];
+    ptr = fopen("event.txt", "a");
+
+        printf("enter the date (yy/mm/dd): ");
+        scanf("%d%d%d", &year,&month, &day);
+        getchar();
+
+        printf("Enter your notes: ");
+        fgets(notes, sizeof(notes), stdin);
+
+        size_t len = strlen(notes);
+    if (len > 0 && notes[len - 1] == '\n') {
+        notes[len - 1] = '\0';
+    }
+
+    fprintf(ptr, "%d %d %d:  %s\n" , year, month , day , notes);
+        fclose(ptr);
+        printf("Event added Successfully\n");
+
  }
