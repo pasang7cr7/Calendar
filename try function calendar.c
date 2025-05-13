@@ -10,7 +10,7 @@ void printCalendar(int weekDays, int monthDays);
 void main2();
 void addEvent();
 void viewEvent();
-void editEvent();
+void deleteEvent();
 
 
 struct event {
@@ -32,9 +32,9 @@ struct event {
     while(1)
     {
         
-     printf("\n 1.View calendar. \n 2.Add Event \n 3.View Event \n 4.Edit event \n 5.Exit ");
+     printf("\n 1.View calendar. \n 2.Add Event \n 3.View Event \n 4.Delete event \n 5.Exit ");
      printf(" \n");
-     printf("\n Enter your choice: ");
+     printf("\n  Enter your choice: ");
      scanf("%d", &choice);
 
 
@@ -51,7 +51,7 @@ struct event {
             viewEvent();
             break;
         case 4:
-          //  editEvent();
+            deleteEvent();
             break;
         case 5:
             return 1;
@@ -172,7 +172,7 @@ struct event {
         notes[len - 1] = '\0';
     }
 
-    fprintf(ptr, "%d %d %d:  %s\n" , year, month , day , notes);
+    fprintf(ptr, " %d %d %d:  %s\n " , year, month , day , notes);
         fclose(ptr);
         printf("Event added Successfully\n");
 
@@ -200,14 +200,68 @@ struct event {
  void viewEvent()
  {
  		FILE *ptr =fopen("event.txt","r");
-	char notes[20];
+	char notes[200];
 	int year, month, day;
-	char ch;
-    while(!feof(ptr))
+	char line[200];
+    printf("\n%-12s %-10s\n", "Date", "Note");
+    printf("---------------------------\n");
+
+    while (fgets(line, sizeof(line), ptr) != NULL)
     {
-       fscanf(ptr," %d %d %d %s",&year,&month,&day, &notes);
-	   printf("%d %d %d %s \n ", year, month, day, notes);	
-	}
-	printf("\n\n");
+        if (sscanf(line, "%d %d %d: %[^\n]", &year, &month, &day, notes) == 4)
+        {
+            printf("%04d-%02d-%02d  %s\n", year, month, day, notes);
+        }
+    }
+	printf("\n");
 	fclose(ptr);
  }
+ 
+ void deleteEvent()
+ {
+ 	FILE* src = fopen("event.txt", "r");
+	FILE* temp = fopen("temp.txt", "w"); 
+	
+	char notes[200], line[200];	
+	int year, month, day;
+	
+	int dyear, dmonth, dday;
+ 	printf("enter event to delete (yy/mm/dd): ");
+ 	scanf("%d %d %d", &dyear, &dmonth, &dday);
+ 	
+ 	int deleted = 0;
+ 	
+ 	while(fgets(line, sizeof(line), src)!=NULL)
+ 	{
+ 		if(sscanf(line,"%d %d %d %[^\n]", &year, &month, &day, &notes)==4)
+ 		{
+ 			if(year==dyear && month == dmonth && day == dday)
+			 {
+			 	deleted =1;
+			 	continue;
+				 }	
+		 }
+		 fputs(line, temp);
+	 }
+	 fclose(src);
+	 fclose(temp);
+	 
+	 remove("event.txt");
+	 rename("temp.txt", "event.txt");
+	 
+	 if(deleted)
+	 {
+	 	printf("Successfully Deleted ");
+	 	
+	 }
+	 else 
+	 {
+	 	printf("The event not found");
+	 }
+	 
+ }
+ 
+ 
+ 
+ 
+ 
