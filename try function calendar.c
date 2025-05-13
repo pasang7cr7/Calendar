@@ -3,6 +3,7 @@
 
 #include<stdio.h>
 #include<conio.h>
+#include<string.h>
 int checklp(int year);
 int calcTotalDays(int year);
 void printCalendar(int weekDays, int monthDays);
@@ -20,6 +21,9 @@ struct event {
 
  int main()
  {
+ 	printf("----------------------------------------\n");
+ 	printf("       Calendar Management System       \n");
+ 	printf("----------------------------------------\n");
     int choice;
     struct event e[100];
     int eventcount = 0;
@@ -27,9 +31,10 @@ struct event {
      //scanf("%d", &choice);
     while(1)
     {
-        printf("\n Enter your choice: ");
+        
      printf("\n 1.View calendar. \n 2.Add Event \n 3.View Event \n 4.Edit event \n 5.Exit ");
      printf(" \n");
+     printf("\n Enter your choice: ");
      scanf("%d", &choice);
 
 
@@ -43,7 +48,7 @@ struct event {
             addEvent();
             break;
         case 3:
-          //  viewEvent();
+            viewEvent();
             break;
         case 4:
           //  editEvent();
@@ -110,9 +115,10 @@ struct event {
  }
  int calcTotalDays(year)
  {
+ 	int i;
      int totaldays=0;
      totaldays=365*(year-1);
-     for(int i=1; i<year;i++)
+     for( i=1; i<year;i++)
      {
          totaldays= totaldays+ checklp(i);
      }
@@ -170,4 +176,22 @@ struct event {
         fclose(ptr);
         printf("Event added Successfully\n");
 
+ }
+ 
+ 
+ void viewEvent()
+ {
+ 	FILE* src = fopen("event.txt", "r");
+ 	int year, month, day;
+ 	
+ 	char notes[100];
+ 	char ch;
+ 	while((ch=fgetc(src))!=EOF)
+ 	{
+ 		fscanf(src, "%d %d %d %s", &year, &month, &day, &notes);
+ 		printf("%d %d %d %s", year, month , day ,notes );
+	 }
+	 fclose(src);
+ 	
+ 	
  }
