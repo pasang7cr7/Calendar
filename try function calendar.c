@@ -176,10 +176,9 @@ struct event {
         fclose(ptr);
         printf("Event added Successfully\n");
 
- }
+ } 
  
- 
- void viewEvent()
+ /*void viewEvent()
  {
  	FILE* src = fopen("event.txt", "r");
  	int year, month, day;
@@ -194,4 +193,21 @@ struct event {
 	 fclose(src);
  	
  	
+ }
+ 
+ */
+ 
+ void viewEvent()
+ {
+ 		FILE *ptr =fopen("event.txt","r");
+	char notes[20];
+	int year, month, day;
+	char ch;
+    while(!feof(ptr))
+    {
+       fscanf(ptr," %d %d %d %s",&year,&month,&day, &notes);
+	   printf("%d %d %d %s \n ", year, month, day, notes);	
+	}
+	printf("\n\n");
+	fclose(ptr);
  }
