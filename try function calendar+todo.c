@@ -31,8 +31,8 @@ struct event {
      //scanf("%d", &choice);
     while(1)
     {
-        
-     printf("\n 1.View calendar. \n 2.Add Event \n 3.View Event \n 4.Delete event\n 5.To-do list \n 6.Exit ");
+
+     printf("\n\n 1.View calendar. \n 2.Add Event \n 3.View Event \n 4.Delete event\n 5.To-do list \n 6.Exit ");
      printf(" \n");
      printf("\n  Enter your choice: ");
      scanf("%d", &choice);
@@ -68,7 +68,7 @@ struct event {
     int totaldays;
     int month, year,weekday;
     char *weekDays[]={"sun","mon","tue","wed","thu","fri","sat"};
-    printf("Enter year and month: ");
+    printf(" Enter year and month: ");
     scanf("%d%d",&year,&month);
     totaldays= calcTotalDays(year);
     int i=1;
@@ -179,13 +179,13 @@ struct event {
         fclose(ptr);
         printf("Event added Successfully\n");
 
- } 
- 
+ }
+
  /*void viewEvent()
  {
  	FILE* src = fopen("event.txt", "r");
  	int year, month, day;
- 	
+
  	char notes[100];
  	char ch;
  	while((ch=fgetc(src))!=EOF)
@@ -194,12 +194,12 @@ struct event {
  		printf("%d %d %d %s", year, month , day ,notes );
 	 }
 	 fclose(src);
- 	
- 	
+
+
  }
- 
+
  */
- 
+
  void viewEvent()
  {
  		FILE *ptr =fopen("event.txt","r");
@@ -219,21 +219,21 @@ struct event {
 	printf("\n");
 	fclose(ptr);
  }
- 
+
  void deleteEvent()
  {
  	FILE* src = fopen("event.txt", "r");
-	FILE* temp = fopen("temp.txt", "w"); 
-	
-	char notes[200], line[200];	
+	FILE* temp = fopen("temp.txt", "w");
+
+	char notes[200], line[200];
 	int year, month, day;
-	
+
 	int dyear, dmonth, dday;
  	printf("enter event to delete (yy/mm/dd): ");
  	scanf("%d %d %d", &dyear, &dmonth, &dday);
- 	
+
  	int deleted = 0;
- 	
+
  	while(fgets(line, sizeof(line), src)!=NULL)
  	{
  		if(sscanf(line,"%d %d %d %[^\n]", &year, &month, &day, &notes)==4)
@@ -242,42 +242,42 @@ struct event {
 			 {
 			 	deleted =1;
 			 	continue;
-				 }	
+				 }
 		 }
 		 fputs(line, temp);
 	 }
 	 fclose(src);
 	 fclose(temp);
-	 
+
 	 remove("event.txt");
 	 rename("temp.txt", "event.txt");
-	 
+
 	 if(deleted)
 	 {
 	 	printf("Successfully Deleted ");
-	 	
+
 	 }
-	 else 
+	 else
 	 {
 	 	printf("The event not found");
 	 }
-	 
+
  }
  void addtodo();
  void viewtodo();
  void marktodo();
  void view_completedtodo();
- 
- 
+
+
  void todo()
  {
  	int choice;
  	printf("------------------------------\n");
  	printf("          To-DO list          \n");
  	printf("------------------------------\n");
- 	
- 	 
-        
+
+
+
         while(1)
         {
         	printf("\n");
@@ -286,7 +286,8 @@ struct event {
         	printf("3. Mark Task as Completed\n");
         	printf("4. View Completed Tasks\n");
         	printf("5. Exit to Main Menu\n");
-        	printf("Enter your choice: ");
+        	printf("---------------------------------------\n");
+        	printf("\nEnter your choice: ");
        		scanf("%d", &choice);
        		printf("\n");
         	getchar(); // Clear buffer
@@ -299,31 +300,32 @@ struct event {
 	        		viewtodo();
 	        		break;
 	        	case 3:
-	        	//	marktodo();
+	        		marktodo();
 	        		break;
 	        	case 4:
-	        	//	view_completedtodo();
+	        	    view_completedtodo();
 	        		break;
 	         	case 5:
 	                printf("Exiting program.\n");
 	                return;
-	        	
+
 	        	default:
-	        		printf("Invalid Choice");	
+	        		printf("Invalid Choice");
 			}
 		}
-      
-        
+
+
+
  }
- 
+
  void addtodo()
  {
  	FILE* ptr ;
 	ptr = fopen("todo.txt", "a");
 	char task[200];
-	 
-	  
-	printf("Enter task to do: ");
+
+
+	printf("Enter task to do: \n");
 	fgets(task, sizeof(task), stdin);
         size_t len = strlen(task);
     if (len > 0 && task[len - 1] == '\n') {
@@ -334,16 +336,17 @@ struct event {
         fclose(ptr);
         return;
     }
-    
+
 
     fprintf(ptr, "%s\n",task);
         fclose(ptr);
-        printf("Task added Successfully\n");
+        printf("\nTask added Successfully!\n");
+        printf("--------------------------------------\n");
 
 
-	
+
  }
- 
+
  void viewtodo()
 {
 		FILE *fp = fopen("todo.txt", "r");
@@ -355,6 +358,7 @@ struct event {
     char line[200];
     int count = 1;
     printf("\n--- To-Do List ---\n");
+    printf("\n");
     while (fgets(line, sizeof(line), fp)) {
         size_t len = strlen(line);
         if (len > 0 && line[len - 1] == '\n') line[len - 1] = '\0';
@@ -364,17 +368,135 @@ struct event {
     if (count == 1) {
         printf("No tasks found.\n");
     }
+    printf("--------------------------\n");
 
     fclose(fp);
-	
-	
+}
 
-	
+void marktodo()
+{
+    FILE* src = fopen("todo.txt", "r");
+    FILE* temp = fopen("temp.txt", "w");
+    FILE* completed = fopen("complete.txt", "a");
+
+   if(!src || !temp || !completed)
+  {
+      printf("Error opening files!\n\n");
+        return;
+    }
+
+    char task[200][200];
+    int count = 0;
+
+ while (fgets(task[count], sizeof(task[count]), src))
+    {
+        size_t len = strlen(task[count]);
+         if (len > 0 && task[count][len - 1] == '\n')
+        {
+         task[count][len-1] = '\0';
+        }
+        count++;
+    }
+
+    if(count == 0)
+    {
+        printf("No tasks found!\n\n");
+        fclose(src);
+        fclose(temp);
+        fclose(completed);
+        return;
+    }
+    int i;
+
+    printf("--To-Do List--\n");
+    for(i=0;i<count;i++)
+    {
+        printf("%d. %s\n", i+1, task[i]);
+    }
+
+
+    int choice;
+    printf("Enter task number that is completed\n");
+    scanf("%d", &choice);
+    getchar();
+
+    if(choice<1 || choice > count)
+    {
+        printf("Invalid choice. \n");
+        fclose(src);
+        fclose(temp);
+        fclose(completed);
+        return;
+    }
+
+    for(i=0;i<count;i++)
+    {
+        if(i == choice - 1)
+        {
+            fprintf(completed, "%s\n", task[i]);
+        }
+        else
+        {
+            fprintf(temp, "%s\n", task[i]);
+        }
+    }
+     fclose(src);
+    fclose(temp);
+    fclose(completed);
+
+    remove("todo.txt");
+    rename("temp.txt", "todo.txt");
+
+    printf("Task marked as completed.\n");
+
+}
+
+void view_completedtodo()
+{
+    FILE* src= fopen("complete.txt", "r");
+
+   if(!src)
+  {
+      printf("Error opening files!\n\n");
+        return;
+    }
+
+    char task[200][200];
+    int count = 0;
+    int i;
+
+    while(fgets(task[count], sizeof(task[count]), src))
+    {
+        size_t len = strlen(task[count]);
+        if(len > 0 && task[count][len-1]== '\n')
+        {
+            task[count][len-1] = '\0';
+        }
+        count++;
+    }
+    if(count == 0)
+    {
+        printf("no completed task\n");
+    }
+    else
+    {
+            printf("--Completed To-Do List--\n\n");
+    for(i=0;i<count;i++)
+    {
+        printf("%d. %s\n", i+1, task[i]);
+    }
+
+    }
+    printf("\n\n");
+    printf("---------------------------------");
+
+
+    fclose(src);
 
 }
 
 
- 
- 
- 
- 
+
+
+
+
