@@ -209,7 +209,7 @@ void deleteEvent() {
       char notes1[200];
     int year1, month1, day1;
     char line1[200];
-    int eventFound = 0;  // Flag to track if events are found
+    int eventFound = 0;  
 
     printf("\n%-12s %-10s\n", "Date", "Note");
     printf("---------------------------\n");
@@ -217,12 +217,12 @@ void deleteEvent() {
     while (fgets(line1, sizeof(line1), src) != NULL) {
         if (sscanf(line1, "%d %d %d: %[^\n]", &year1, &month1, &day1, notes1) == 4) {
             printf("%04d-%02d-%02d  %s\n", year1, month1, day1, notes1);
-            eventFound = 1;  // Set flag when an event is found
+            eventFound = 1;  
         }
     }
 
-    if (!eventFound) {  // If no event was found, print the message
-        printf("No event to delete.\n");
+    if (!eventFound) {  
+        printf("No event to delete.\n\n");
         return;
     }
 
@@ -263,6 +263,7 @@ void deleteEvent() {
 
 
 void todo() {
+	clrscr();
     int choice;
 
     printf("------------------------------\n");
@@ -422,6 +423,7 @@ void marktodo() {
 }
 
 void view_completedtodo() {
+	int i;
     FILE* src = fopen("complete.txt", "r");
 
     if (!src) {
@@ -444,7 +446,7 @@ void view_completedtodo() {
         printf("\nNo completed tasks.\n\n");
     } else {
         printf("\n--- Completed To-Do List ---\n\n");
-        for (int i = 0; i < count; i++) {
+        for ( i = 0; i < count; i++) {
             printf("%d. %s\n", i + 1, task[i]);
         }
     }
