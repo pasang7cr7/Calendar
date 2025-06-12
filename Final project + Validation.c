@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<conio.h>
 #include<string.h>
+#include<time.h>
 
 int checklp(int year);
 int calcTotalDays(int year);
@@ -12,8 +13,8 @@ void deleteEvent();
 void todo();
 void addtodo();
 void viewtodo();
+void view_completedtodo(); 
 void marktodo();
-void view_completedtodo();
 
 struct event {
     int year, month, day;
@@ -155,27 +156,43 @@ void printCalendar(int weekday, int monthDays) {
 
 void addEvent() {
     FILE* ptr;
-    int year,month,day;
+    int year, month, day;
     char notes[100];
+    
+    // Get current system date
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    int currentYear = tm.tm_year + 1900;
+    int currentMonth = tm.tm_mon + 1;
+    int currentDay = tm.tm_mday;
+
     ptr = fopen("event.txt", "a");
 
-        printf("enter the date (yy/mm/dd): ");
-        scanf("%d%d%d", &year,&month, &day);
-        getchar();
+    printf("enter the date (yy/mm/dd): ");
+    scanf("%d%d%d", &year, &month, &day);
+    getchar();
 
-        printf("Enter your notes: ");
-        fgets(notes, sizeof(notes), stdin);
+    // Check if event date is in the past
+    if (year < currentYear || 
+        (year == currentYear && month < currentMonth) || 
+        (year == currentYear && month == currentMonth && day < currentDay)) {
+        printf("Cannot add event in the past. Please enter a future date.\n");
+        fclose(ptr);
+        return;
+    }
 
-        size_t len = strlen(notes);
+    printf("Enter your notes: ");
+    fgets(notes, sizeof(notes), stdin);
+
+    size_t len = strlen(notes);
     if (len > 0 && notes[len - 1] == '\n') {
         notes[len - 1] = '\0';
     }
 
-    fprintf(ptr, " %d %d %d:  %s\n " , year, month , day , notes);
-        fclose(ptr);
-        printf("\nEvent added Successfully\n");
-        printf("----------------------------------------\n");
-
+    fprintf(ptr, " %d %d %d:  %s\n ", year, month, day, notes);
+    fclose(ptr);
+    printf("\nEvent added Successfully\n");
+    printf("----------------------------------------\n");
 }
 
 void viewEvent() {
@@ -213,7 +230,7 @@ void deleteEvent() {
       char notes1[200];
     int year1, month1, day1;
     char line1[200];
-    int eventFound = 0;  
+    int eventFound = 0;  // Flag to track if events are found
 
     printf("\n%-12s %-10s\n", "Date", "Note");
     printf("---------------------------\n");
@@ -221,12 +238,12 @@ void deleteEvent() {
     while (fgets(line1, sizeof(line1), src) != NULL) {
         if (sscanf(line1, "%d %d %d: %[^\n]", &year1, &month1, &day1, notes1) == 4) {
             printf("%04d-%02d-%02d  %s\n", year1, month1, day1, notes1);
-            eventFound = 1;  
+            eventFound = 1;  // Set flag when an event is found
         }
     }
 
-    if (!eventFound) {  
-        printf("No event to delete.\n\n");
+    if (!eventFound) {  // If no event was found, print the message
+        printf("No event to delete.\n");
         return;
     }
 
@@ -267,7 +284,7 @@ void deleteEvent() {
 
 
 void todo() {
-	clrscr();
+	
     int choice;
 
     printf("------------------------------\n");
@@ -283,7 +300,7 @@ void todo() {
         printf("---------------------------------------\n");
         printf("\nEnter your choice: ");
         scanf("%d", &choice);
-        getchar(); // Clear buffer
+        getchar(); 
 
         switch (choice) {
         case 1:
@@ -438,7 +455,7 @@ void view_completedtodo() {
     char task[200][200];
     int count = 0;
 
-    while (fgets(task[count], sizeof(task[count]), src)) {
+    while (fgets(tas[count], sizeof(task[count]), src)) {
         size_t len = strlen(task[count]);
         if (len > 0 && task[count][len - 1] == '\n') {
             task[count][len - 1] = '\0';
@@ -458,3 +475,5 @@ void view_completedtodo() {
     fclose(src);
      printf("--------------------------\n");
 }
+
+
