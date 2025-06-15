@@ -455,7 +455,7 @@ void view_completedtodo() {
     char task[200][200];
     int count = 0;
 
-    while (fgets(tas[count], sizeof(task[count]), src)) {
+    while (fgets(task[count], sizeof(task[count]), src)) {
         size_t len = strlen(task[count]);
         if (len > 0 && task[count][len - 1] == '\n') {
             task[count][len - 1] = '\0';

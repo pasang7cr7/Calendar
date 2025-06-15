@@ -60,9 +60,10 @@ void printCalendar(int weekDays, int monthDays);
  }
  int calcTotalDays(year)
  {
+ 	int i;
      int totaldays=0;
      totaldays=365*(year-1);
-     for(int i=1; i<year;i++)
+     for( i=1; i<year;i++)
      {
          totaldays= totaldays+ checklp(i);
      }
